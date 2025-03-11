@@ -12,6 +12,9 @@ const sendEmail = (email, emailToken) => {
     },
   })
 
+  /*
+    untuk html dibawah ini localhost and endpoint refers to frontend web server
+  */
   const mailOptions = {
     from: `Clocklify <${process.env.USER_EMAIL}>`,
     to: email,

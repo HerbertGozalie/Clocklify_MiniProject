@@ -78,7 +78,7 @@ const loginUser = asyncErrorHandler(
       return next(new errorCustom('Account Invalid!, please sign up', 404))
     }
 
-    if(user.emailToken){
+    if(!user.verified){
       return next(new errorCustom('Account need to be verified!', 403))
     }
 
