@@ -103,7 +103,6 @@ const loginUser = asyncErrorHandler(
 )
 
 
-
 const deleteUser = asyncErrorHandler(
   async (req, res, next) => {
     const user = await User.findByPk(req.params.uuid)
