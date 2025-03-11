@@ -3,7 +3,3 @@ module.exports = (func) => {
     func(req, res, next).catch(err => next(err));
   }
 }
-
-/*
-  Promise.resolve to ensures both asyn and sync errors are caught
-*/

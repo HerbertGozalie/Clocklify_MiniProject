@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // define association here
+    static associate({Activity}) {
+      this.hasMany(Activity, {foreignKey: 'user_uuid', as: 'activities'})
     }
   }
   User.init({
@@ -42,11 +42,12 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     verified: {
-      type: DataTypes.ENUM,
-      values: ['verified', 'not verified'],
-      allowNull: false,
-      defaultValue: 'not verified'
-    }
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    emailToken: {
+      type: DataTypes.STRING,
+    },
   }, {
     sequelize,
     tableName: 'users',

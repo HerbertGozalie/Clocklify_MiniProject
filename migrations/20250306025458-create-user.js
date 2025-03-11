@@ -18,14 +18,20 @@ module.exports = {
         allowNull: false,
       },
       verified: {
-        type: DataTypes.ENUM('verified', 'not verified'),
-        allowNull: false,
-        defaultValue: 'not verified'
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      emailToken: {
+        type: DataTypes.STRING,
       },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE
       },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE
+      }
     });
   },
   async down(queryInterface, DataTypes) {
