@@ -12,6 +12,16 @@ const errorCustom = require('./utils/errorCustom.js')
 
 const app = express()
 
+// Loggin middleware
+app.use(
+  (req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.originalUrl}`);
+    console.log('Headers:', req.headers);
+    console.log('Body:', req.body);
+    next();
+  }
+)
+
 //middlware
 app.use(cors())
 app.use(express.json())
