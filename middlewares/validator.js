@@ -69,8 +69,31 @@ const validateActivity = [
   validateRequest
 ]
 
+const validateTimeAndLocation = [
+  body("start_time")
+    .optional()
+    .isISO8601().withMessage("Start time must be a date"),
+  body("end_time")
+    .optional()
+    .isISO8601().withMessage("End time must be a date"),
+  body("location_lat")
+    .optional()
+    .isFloat({
+      min: -90,
+      max: 90
+    }). withMessage("Location must be between -90 and 90"),
+  body("location_lng")
+    .optional()
+    .isFloat({
+      min: -180,
+      max: 180
+    }). withMessage("Location must be between -180 and 180"),
+  validateRequest
+]
+
 module.exports = {
   validateUserRegister,
   validateUserLogin,
-  validateActivity
+  validateActivity,
+  validateTimeAndLocation
 }
