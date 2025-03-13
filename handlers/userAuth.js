@@ -37,7 +37,8 @@ const registerUser = asyncErrorHandler(
 
 const verifyEmail = asyncErrorHandler(
   async(req, res, next) => {
-    const emailToken = req.body.emailToken;
+    // const emailToken = req.body.emailToken;
+    const emailToken = req.query;
 
     if(!emailToken){
       return next(new errorCustom('Invalid request', 400))

@@ -12,7 +12,7 @@ const {
 } = require('../middlewares/validator.js');
 
 route.post('/register', validateUserRegister, registerUser)
-route.post('/verifyemail', verifyEmail)
+route.patch('/verifyemail', verifyEmail)
 route.post('/login', validateUserLogin, loginUser)
 
 route.delete('/:uuid', deleteUser)
