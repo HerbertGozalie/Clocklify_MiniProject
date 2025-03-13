@@ -83,6 +83,17 @@ const loginUser = asyncErrorHandler(
       return next(new errorCustom('Account need to be verified!', 403))
     }
 
+    if(!password){
+      return res.status(200).json({
+      status: 'success',
+      message: 'Email verified, please enter your password',
+      user: {
+        uuid: user.uuid,
+        email: user.email,
+      },
+    })
+    }
+
     const passwordMatch = await comparePassword(password, user.password)
 
     if(!passwordMatch){
