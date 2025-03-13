@@ -18,7 +18,7 @@ const createJWT = (user) => {
   },
   process.env.JWT_SECRET,
   {
-    expiresIn: '1h',
+    expiresIn: '48h',
   })
   return token;
 }
