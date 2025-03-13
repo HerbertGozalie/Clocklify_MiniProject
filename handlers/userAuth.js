@@ -23,47 +23,21 @@ const registerUser = asyncErrorHandler(
 
     sendEmail(email, emailToken)
 
-    res.status(201).json({
+    const token = createJWT(user);
+
+    res.status(201)
+      .header("Authorization", `Bearer ${token}`)
+      .json({
       status: 'success',
       message: 'User created',
       user: {
         uuid: user.uuid,
         email: user.email,
       },
-      emailToken
+      token
     })
   }
 )
-
-const verifyEmail = asyncErrorHandler(
-  async(req, res, next) => {
-    // const emailToken = req.body.emailToken;
-    const emailToken = req.query;
-
-    if(!emailToken){
-      return next(new errorCustom('Invalid request', 400))
-    }
-
-    const user = await User.findOne({ where: { emailToken } })
-
-    if(!user){
-      return next(new errorCustom('User not found', 404))
-    } 
-
-    await User.update(
-      { verified: true, emailToken: null },
-      { where: { emailToken } }
-    )
-
-    await User.findOne({ where: { emailToken } })
-
-    res.status(200).json({
-      status: 'success',
-      message: 'User Verified'
-    })
-  }
-)
-
 
 const loginUser = asyncErrorHandler(
   async (req, res, next) => {
@@ -80,13 +54,14 @@ const loginUser = asyncErrorHandler(
     }
 
     if(!user.verified){
+      sendEmail(user.email, user.emailToken)
       return next(new errorCustom('Account need to be verified!', 403))
     }
 
     if(!password){
       return res.status(200).json({
       status: 'success',
-      message: 'Email verified, please enter your password',
+      message: 'Please enter your password',
       user: {
         uuid: user.uuid,
         email: user.email,
@@ -102,7 +77,9 @@ const loginUser = asyncErrorHandler(
 
     const token = createJWT(user);
 
-    res.status(200).json({
+    res.status(200)
+      .header("Authorization", `Bearer ${token}`)
+      .json({
       status: 'success',
       message: 'User logged in',
       user: {
@@ -114,6 +91,31 @@ const loginUser = asyncErrorHandler(
   }
 )
 
+const verifyEmail = asyncErrorHandler(
+  async(req, res, next) => {
+    const { emailToken } = req.query;
+
+    if(!emailToken){
+      return next(new errorCustom('Invalid request', 400))
+    }
+
+    const user = await User.findOne({ where: { emailToken } })
+
+    if(!user){
+      return next(new errorCustom('User not found', 404))
+    } 
+
+    await User.update(
+      { verified: true, emailToken: null },
+      { where: { emailToken } }
+    )
+
+    res.status(200).json({
+      status: 'success',
+      message: 'User Verified'
+    })
+  }
+)
 
 const deleteUser = asyncErrorHandler(
   async (req, res, next) => {

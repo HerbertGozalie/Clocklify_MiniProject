@@ -40,8 +40,8 @@ const validateUserLogin = [
   body('email')
     .notEmpty().withMessage("Email must be filled")
     .isEmail().withMessage('Invalid email'),
-  body("password")
-    .notEmpty().withMessage("Password must be filled"),
+  // body("password")
+  //   .notEmpty().withMessage("Password must be filled"),
   validateRequest
 ]
 

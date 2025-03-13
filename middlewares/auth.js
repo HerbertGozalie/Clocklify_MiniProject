@@ -26,7 +26,7 @@ const createJWT = (user) => {
 const protect = (req, res ,next) => {
   const bearer = req.headers.authorization
 
-  if(!bearer || !bearer.startsWith('Bearer ')){
+  if(!bearer || typeof bearer !== "string" || !bearer.startsWith('Bearer ')){
     return next(new errorCustom('Unauthorized: no token provided', 401))
   }
 
