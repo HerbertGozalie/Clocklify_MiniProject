@@ -2,15 +2,24 @@
 const {
   Model
 } = require('sequelize');
+
+const crypto = require('crypto');
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate({Activity}) {
       this.hasMany(Activity, {foreignKey: 'user_uuid', as: 'activities'})
+    }
+
+    //Instance methods
+    createResetPasswordToken(){     
+      const resetToken = crypto.randomBytes(32).toString('hex')
+      
+      this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+      this.passwordResetTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+      console.log(resetToken, this.passwordResetToken);
+      return resetToken;
     }
   }
   User.init({
@@ -48,11 +57,24 @@ module.exports = (sequelize, DataTypes) => {
     emailToken: {
       type: DataTypes.STRING,
     },
+    passwordResetToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    passwordResetTokenExpires: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    passwordChangedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    }
   }, {
     sequelize,
     tableName: 'users',
     modelName: 'User',
     timestamps: true,
   });
+
   return User;
 };

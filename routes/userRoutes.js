@@ -3,18 +3,22 @@ const {
   registerUser, 
   loginUser, 
   verifyEmail, 
-  deleteUser 
+  deleteUser,
+  forgotPassword,
+  resetPassword
 } = require('../handlers/userAuth.js')
 
 const {
   validateUserRegister, 
-  validateUserLogin
+  validateUserLogin,
+  validateUserResetPassword
 } = require('../middlewares/validator.js');
 
 route.post('/register', validateUserRegister, registerUser)
-route.get('/verifyemail', verifyEmail)
+route.patch('/verifyemail', verifyEmail)
 route.post('/login', validateUserLogin, loginUser)
-
+route.post('/forgotpassword', forgotPassword)
+route.patch('/resetpassword', validateUserResetPassword, resetPassword)
 route.delete('/:uuid', deleteUser)
 
 module.exports = route

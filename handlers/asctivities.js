@@ -177,10 +177,6 @@ const filterActivity = asyncErrorHandler(
   }
 )
 
-/*
-  testing 
- */  
-
 const updateActivity = asyncErrorHandler(
   async(req, res ,next) => {
 

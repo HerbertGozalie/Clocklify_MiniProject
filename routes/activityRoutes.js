@@ -16,12 +16,9 @@ const {
 } = require('../handlers/asctivities.js')
 
 route.post('/', validateActivity, createActivity)
-
 route.get('/search', searchActivity)
 route.get('/filter', filterActivity)
-
 route.get('/', getAllActivities)
-
 route.get('/:uuid', getSingleActivity)
 route.patch('/:uuid', validateTimeAndLocation, updateActivity)
 route.delete('/:uuid', deleteActivity)

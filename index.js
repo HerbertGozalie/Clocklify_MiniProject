@@ -5,10 +5,7 @@ const app = require('./app.js')
 const { sequelize } = require('./models')
 const PORT = process.env.PORT
 
-
-
 app.listen(PORT, async() => {
-  
   try {
     await sequelize.authenticate()
     console.log('Database connection has been established successfully.')

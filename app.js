@@ -1,15 +1,11 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
-
 const globalErrorHandler = require('./middlewares/globalErrorHandler.js')
 const { protect } = require('./middlewares/auth.js')
-
 const userRoutes = require('./routes/userRoutes.js')
 const activityRoutes = require('./routes/activityRoutes.js')
-
 const errorCustom = require('./utils/errorCustom.js')
-
 const app = express()
 
 // Loggin middleware

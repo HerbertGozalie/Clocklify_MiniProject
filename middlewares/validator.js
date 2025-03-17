@@ -22,17 +22,22 @@ const validateUserRegister = [
       const existingUser = await User.findOne({
         where: { email: value }
       });
-      /**
-       * need to be fix
-       */
+      
       if(existingUser){
         throw new errorCustom('Email already exists!', 409);
-        
       }
     }),
   body("password")
     .notEmpty().withMessage("Password must be filled")
     .isStrongPassword().withMessage("Password has to be strong!"),
+  body("confirmPassword")
+    .notEmpty().withMessage("Confirm password must be filled")
+    .custom((value, {req}) => {
+      if(value !== req.body.password){
+        throw new errorCustom('Passwords do not match!', 400);
+      }
+      return true
+    }),
   validateRequest
 ]
 
@@ -40,8 +45,21 @@ const validateUserLogin = [
   body('email')
     .notEmpty().withMessage("Email must be filled")
     .isEmail().withMessage('Invalid email'),
-  // body("password")
-  //   .notEmpty().withMessage("Password must be filled"),
+  validateRequest
+]
+
+const validateUserResetPassword = [
+  body("password")
+    .notEmpty().withMessage("Password must be filled")
+    .isStrongPassword().withMessage("Password has to be strong!"),
+  body("confirmPassword")
+    .notEmpty().withMessage("Confirm password must be filled")
+    .custom((value, {req}) => {
+      if(value !== req.body.password){
+        throw new errorCustom('Passwords do not match!', 400);
+      }
+      return true
+    }),
   validateRequest
 ]
 
@@ -95,5 +113,6 @@ module.exports = {
   validateUserRegister,
   validateUserLogin,
   validateActivity,
-  validateTimeAndLocation
+  validateTimeAndLocation,
+  validateUserResetPassword
 }

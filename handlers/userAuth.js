@@ -1,8 +1,10 @@
 const { User } = require('../models');
 const crypto = require('crypto');
+const { Op } = require('sequelize')
 const asyncErrorHandler = require('../utils/asyncErrorHandler.js')
 const errorCustom = require('../utils/errorCustom.js')
-const sendEmail = require('../utils/sendEmail.js')
+const sendVerifEmail = require('../utils/sendVerifEmail.js')
+const sendResetPassEmail = require('../utils/sendResetPassEmail.js')
 
 const {
   comparePassword,
@@ -21,12 +23,10 @@ const registerUser = asyncErrorHandler(
       emailToken
     })
 
-    sendEmail(email, emailToken)
-
+    sendVerifEmail(email, emailToken)
     const token = createJWT(user);
 
     res.status(201)
-      .header("Authorization", `Bearer ${token}`)
       .json({
       status: 'success',
       message: 'User created',
@@ -34,7 +34,8 @@ const registerUser = asyncErrorHandler(
         uuid: user.uuid,
         email: user.email,
       },
-      token
+      token,
+      emailToken
     })
   }
 )
@@ -78,7 +79,6 @@ const loginUser = asyncErrorHandler(
     const token = createJWT(user);
 
     res.status(200)
-      .header("Authorization", `Bearer ${token}`)
       .json({
       status: 'success',
       message: 'User logged in',
@@ -93,26 +93,99 @@ const loginUser = asyncErrorHandler(
 
 const verifyEmail = asyncErrorHandler(
   async(req, res, next) => {
-    const { emailToken } = req.query;
+    const emailToken = req.body.emailToken;
 
     if(!emailToken){
       return next(new errorCustom('Invalid request', 400))
     }
 
-    const user = await User.findOne({ where: { emailToken } })
+    const user = await User.findOne({
+      where: {
+        emailToken 
+      }
+    })
 
     if(!user){
       return next(new errorCustom('User not found', 404))
     } 
 
-    await User.update(
-      { verified: true, emailToken: null },
-      { where: { emailToken } }
-    )
+    user.verified = true
+    user.emailToken = null
+    await user.save()
 
     res.status(200).json({
       status: 'success',
       message: 'User Verified'
+    })
+  }
+)
+
+const forgotPassword = asyncErrorHandler(
+  async(req, res, next) => {
+    const email = req.body.email
+
+    const user = await User.findOne({
+      where: {
+        email 
+      } 
+    })
+
+    if(!user){
+      return next(new errorCustom('User not found', 404))
+    }
+
+    const resetToken = user.createResetPasswordToken()
+    await user.save()
+
+    try{
+      await sendResetPassEmail(email, resetToken)
+
+      res.status(200).json({
+        status:'success',
+        message: 'Reset password email sent'
+      })
+    } catch(err) {
+      user.passwordResetToken = null
+      user.passwordResetTokenExpires = null
+      user.save()
+
+      return next(new errorCustom('Failed to send password reset email', 500))
+    }
+  }
+)
+
+const resetPassword = asyncErrorHandler(
+  async (req, res, next) => {
+    const resetToken = crypto.createHash('sha256')
+      .update(req.body.resetToken)
+      .digest('hex') 
+    
+    const user = await User.findOne({
+      where: {
+        passwordResetToken: resetToken,
+        passwordResetTokenExpires: {
+          [Op.gt]: Date.now() 
+        }
+      }
+    })
+
+    if(!user){
+      return next(new errorCustom('Token is invalid or has expired!', 400))
+    }
+
+    user.password = await hashPassword(req.body.password)
+    user.passwordResetToken = null
+    user.passwordResetTokenExpires = null
+    user.passwordChangedAt = Date.now()
+    await user.save()
+
+    const loginToken = createJWT(user);
+
+    res.status(200)
+      .json({
+      status: 'success',
+      message: 'User logged in',
+      loginToken
     })
   }
 )
@@ -134,5 +207,7 @@ module.exports = {
   registerUser, 
   loginUser, 
   verifyEmail, 
-  deleteUser
+  deleteUser,
+  forgotPassword,
+  resetPassword
 }
