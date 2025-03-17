@@ -173,7 +173,7 @@ const resetPassword = asyncErrorHandler(
       return next(new errorCustom('Token is invalid or has expired!', 400))
     }
 
-    user.password = await hashPassword(req.body.password)
+    user.password = await hashPassword(req.body.newPassword)
     user.passwordResetToken = null
     user.passwordResetTokenExpires = null
     user.passwordChangedAt = Date.now()
