@@ -64,7 +64,7 @@ const sendVerifEmail = async (email, emailToken) => {
   try{
     let info = await transporter.sendMail(mailOptions);
     console.log('Email sent:', info.response);
-  } catch(err){
+  } catch(error){
     console.error('Error sending email:', error); 
   }
 }
