@@ -2,13 +2,15 @@ const nodemailer = require('nodemailer');
 
 const sendResetPassEmail = async (email, resetToken) => {
   const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD
-    },
-  }) 
+      service: process.env.VERIF_SERVICE,
+      host: process.env.VERIF_HOST,
+      port: process.env.VERIF_PORT,
+      secure: false,
+      auth: {
+        user: process.env.VERIF_USER_EMAIL,
+        pass: process.env.VERIF_USER_PASSWORD
+      },
+    }) 
 
   const resetUrl = `${process.env.REACT_FRONTEND_URL}/reset-password?resetToken=${resetToken}`;
 
