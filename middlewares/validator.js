@@ -49,7 +49,7 @@ const validateUserLogin = [
 ]
 
 const validateUserResetPassword = [
-  body("password")
+  body("newPassword")
     .notEmpty().withMessage("Password must be filled")
     .isStrongPassword().withMessage("Password has to be strong!"),
   body("confirmPassword")
