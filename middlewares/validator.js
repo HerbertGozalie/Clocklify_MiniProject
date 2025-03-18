@@ -55,7 +55,7 @@ const validateUserResetPassword = [
   body("confirmPassword")
     .notEmpty().withMessage("Confirm password must be filled")
     .custom((value, {req}) => {
-      if(value !== req.body.password){
+      if(value !== req.body.newPassword){
         throw new errorCustom('Passwords do not match!', 400);
       }
       return true
