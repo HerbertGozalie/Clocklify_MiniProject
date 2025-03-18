@@ -24,6 +24,11 @@ const createJWT = (user) => {
 }
 
 const protect = (req, res ,next) => {
+
+  if(req.method === 'OPTIONS'){
+    return next()
+  }
+  
   const bearer = req.headers.authorization
 
   if(!bearer || typeof bearer !== "string" || !bearer.startsWith('Bearer ')){

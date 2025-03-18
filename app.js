@@ -19,12 +19,15 @@ app.use(
 )
 
 //middlware
-app.use(cors())
-// app.use(cors({
-//   origin: '*', // or '*'
-//   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-//   allowedHeaders: ['Content-Type', 'Authorization']
-// }));
+// app.use(cors())
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204
+}));
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan('dev'))
