@@ -55,7 +55,7 @@ const loginUser = asyncErrorHandler(
     }
 
     if(!user.verified){
-      sendEmail(user.email, user.emailToken)
+      sendVerifEmail(user.email, user.emailToken)
       return next(new errorCustom('Account need to be verified!', 403))
     }
 
