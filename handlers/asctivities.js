@@ -43,104 +43,25 @@ const createActivity = asyncErrorHandler(
 
 const getAllActivities = asyncErrorHandler(
   async (req, res, next) => {
-    const activities = await Activity.findAll({
-      where: {
-        user_uuid: req.user.uuid
-      }
-    })
+    const { description, sortBy, lat, lng } = req.query
+    let activities
 
-    res.status(200).json({
-      status: 'success',
-      message: 'Fetch All Activity',
-      length: activities.length,
-      data: {
-        activities
-      }
-    })
-  }
-)
-
-const getSingleActivity = asyncErrorHandler(
-  async (req, res, next) => {
-    const activity = await Activity.findByPk(req.params.uuid)
-
-    if(!activity){
-      return next(new errorCustom('No post found!', 404))
+    const whereConditions = {
+      user_uuid: req.user.uuid
     }
 
-    res.status(200).json({
-      status: 'success',
-      message: 'Get A Activity',
-      activity
-    })
-  }
-)
-
-/*
-  GET http://localhost:8383/api/v1/activity/search?description=YOUR_DESCRIPTION
-  */  
-
-const searchActivity = asyncErrorHandler(
-  async(req, res, next) => {
-    const { description } = req.query
-
-    const activities = await Activity.findAll({
-      where: {
-        description: {
-          [Op.iLike]: `%${description}%`
-        },
-        user_uuid: req.user.uuid
-      }
-    })
-
-    if(activities.length === 0){
-      return next(new errorCustom('No post found!', 404))
+    if(description){
+      whereConditions.description = {[Op.iLike]: `%${description}%`}
     }
 
-    res.status(200).json({
-      status: 'success',
-      message: 'Activity found',
-      length: activities.length,
-      data: {
-        activities
-      }
-    })
-  }
-)
-
-const filterActivity = asyncErrorHandler(
-  async(req, res, next) => {
-    const { sortBy, lat, lng } = req.query
-    console.log({ sortBy, lat, lng }); 
-    let activities;
-
-    if(sortBy === 'latest') {
-      activities = await Activity.findAll({
-        where: {
-          user_uuid: req.user.uuid
-        },
-        order: [['createdAt', 'DESC']]
-      })
-    }
-    
-    /*
-      untuk frontend pake GEOLOCATION
-
-      GET /filter?sortBy=latest
-
-      GET /filter?sortBy=distance&lat=YOUR_LATITUDE&lng=YOUR_LONGITUDE
-    */  
-
-    else if(sortBy === 'distance' && lat && lng) {
+    if(sortBy === 'distance' && lat && lng) {
       const userLocation = { 
         latitude: parseFloat(lat), 
         longitude: parseFloat(lng)
       }
 
       const allActivities = await Activity.findAll({
-        where: {
-          user_uuid: req.user.uuid
-        }
+        where: whereConditions
       })
 
       activities = allActivities.map(activity => {
@@ -161,9 +82,17 @@ const filterActivity = asyncErrorHandler(
     }
 
     else {
-      return next(
-        new errorCustom('Invalid sortBy parameter. Use "latest" or "distance".', 400)
-      )
+      const queryOptions = { where: whereConditions };
+
+      if (sortBy === 'latest') {
+        queryOptions.order = [['createdAt', 'DESC']];
+      }
+
+      activities = await Activity.findAll(queryOptions);
+    }
+
+    if(activities.length === 0){
+      return next(new errorCustom('No post found!', 404))
     }
 
     res.status(200).json({
@@ -173,6 +102,122 @@ const filterActivity = asyncErrorHandler(
       data: {
         activities
       }
+    })
+  }
+)
+
+// 
+  // GET http://localhost:8383/api/v1/activity/search?description=YOUR_DESCRIPTION
+
+// const searchActivity = asyncErrorHandler(
+//   async(req, res, next) => {
+//     const { description } = req.query
+
+//     const activities = await Activity.findAll({
+//       where: {
+//         description: {
+//           [Op.iLike]: `%${description}%`
+//         },
+//         user_uuid: req.user.uuid
+//       }
+//     })
+
+//     if(activities.length === 0){
+//       return next(new errorCustom('No post found!', 404))
+//     }
+
+//     res.status(200).json({
+//       status: 'success',
+//       message: 'Activity found',
+//       length: activities.length,
+//       data: {
+//         activities
+//       }
+//     })
+//   }
+// )
+
+// const filterActivity = asyncErrorHandler(
+//   async(req, res, next) => {
+//     const { sortBy, lat, lng } = req.query
+//     console.log({ sortBy, lat, lng }); 
+//     let activities;
+
+//     if(sortBy === 'latest') {
+//       activities = await Activity.findAll({
+//         where: {
+//           user_uuid: req.user.uuid
+//         },
+//         order: [['createdAt', 'DESC']]
+//       })
+//     }
+    
+//     /*
+//       untuk frontend pake GEOLOCATION
+
+//       GET /filter?sortBy=latest
+
+//       GET /filter?sortBy=distance&lat=YOUR_LATITUDE&lng=YOUR_LONGITUDE
+//     */  
+
+//     else if(sortBy === 'distance' && lat && lng) {
+//       const userLocation = { 
+//         latitude: parseFloat(lat), 
+//         longitude: parseFloat(lng)
+//       }
+
+//       const allActivities = await Activity.findAll({
+//         where: {
+//           user_uuid: req.user.uuid
+//         }
+//       })
+
+//       activities = allActivities.map(activity => {
+//         const activityLocation = {
+//           latitude: activity.location_lat,
+//           longitude: activity.location_lng
+//         }
+
+//         const distance = haversine(userLocation, activityLocation)
+
+//         return {
+//           ...activity.toJSON(),
+//           distance
+//         }
+//       }).sort(
+//         (a, b) => a.distance - b.distance
+//       )
+//     }
+
+//     else {
+//       return next(
+//         new errorCustom('Invalid sortBy parameter. Use "latest" or "distance".', 400)
+//       )
+//     }
+
+//     res.status(200).json({
+//       status: 'success',
+//       message: 'Fetch All Activity',
+//       length: activities.length,
+//       data: {
+//         activities
+//       }
+//     })
+//   }
+// )
+
+const getSingleActivity = asyncErrorHandler(
+  async (req, res, next) => {
+    const activity = await Activity.findByPk(req.params.uuid)
+
+    if(!activity){
+      return next(new errorCustom('No post found!', 404))
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Get A Activity',
+      activity
     })
   }
 )
