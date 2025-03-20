@@ -54,7 +54,7 @@ const getAllActivities = asyncErrorHandler(
       whereConditions.description = {[Op.iLike]: `%${description}%`}
     }
 
-    if(sortBy === 'distance' && lat && lng) {
+    if(sortBy === 'distance' && lat && lng ) {
       const userLocation = { 
         latitude: parseFloat(lat), 
         longitude: parseFloat(lng)
@@ -76,8 +76,7 @@ const getAllActivities = asyncErrorHandler(
           ...activity.toJSON(),
           distance
         }
-      })
-      activities.sort(
+      }).sort(
         (a, b) => a.distance - b.distance
       )
     }
@@ -85,10 +84,13 @@ const getAllActivities = asyncErrorHandler(
     else {
       const queryOptions = { where: whereConditions };
 
-      if (sortBy === 'latest') {
+      if (sortBy === 'oldest') {
+        queryOptions.order = [['start_time', 'ASC']];
+      }
+      
+      else if (sortBy === 'latest') {
         queryOptions.order = [['start_time', 'DESC']];
       }
-
       activities = await Activity.findAll(queryOptions);
     }
 
