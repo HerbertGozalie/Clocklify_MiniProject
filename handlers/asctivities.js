@@ -274,8 +274,8 @@ module.exports = {
   createActivity,
   getAllActivities,
   getSingleActivity,
-  searchActivity,
-  filterActivity,
+  // searchActivity,
+  // filterActivity,
   updateActivity,
   deleteActivity,
 }
