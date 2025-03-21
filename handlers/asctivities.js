@@ -54,7 +54,7 @@ const getAllActivities = asyncErrorHandler(
       whereConditions.description = {[Op.iLike]: `%${description}%`}
     }
 
-    if(sortBy === 'distance' && lat && lng ) {
+    if(sortBy === 'nearby' && lat && lng ) {
       const userLocation = { 
         latitude: parseFloat(lat), 
         longitude: parseFloat(lng)
@@ -84,11 +84,11 @@ const getAllActivities = asyncErrorHandler(
     else {
       const queryOptions = { where: whereConditions };
 
-      if (sortBy === 'oldest') {
+      if (sortBy === 'oldestdate') {
         queryOptions.order = [['start_time', 'ASC']];
       }
       
-      else if (sortBy === 'latest') {
+      else if (sortBy === 'latestdate') {
         queryOptions.order = [['start_time', 'DESC']];
       }
       activities = await Activity.findAll(queryOptions);
@@ -155,13 +155,13 @@ const getAllActivities = asyncErrorHandler(
 //       })
 //     }
     
-//     /*
+//     
 //       untuk frontend pake GEOLOCATION
 
 //       GET /filter?sortBy=latest
 
 //       GET /filter?sortBy=distance&lat=YOUR_LATITUDE&lng=YOUR_LONGITUDE
-//     */  
+//     
 
 //     else if(sortBy === 'distance' && lat && lng) {
 //       const userLocation = { 
