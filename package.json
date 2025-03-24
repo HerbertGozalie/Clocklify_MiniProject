@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "migrate:prod": "sequelize-cli db:migrate --env production",
-    "dev": "nodemon index.js"
+    "start": "npm run migrate:prod && node index.js"
   },
   "keywords": [],
   "author": "",
