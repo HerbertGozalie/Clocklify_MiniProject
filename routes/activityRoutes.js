@@ -9,8 +9,8 @@ const {
   createActivity,
   getAllActivities,
   getSingleActivity,
-  searchActivity,
-  filterActivity,
+  // searchActivity,
+  // filterActivity,
   updateActivity,
   deleteActivity,
 } = require('../handlers/asctivities.js')
