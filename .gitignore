@@ -20,7 +20,6 @@ yarn-error.log*
 *.db-wal
 *.db-shm
 pg_data/
-config/config.json
 
 
 # Compiled files

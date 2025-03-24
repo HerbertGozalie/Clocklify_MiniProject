@@ -76,9 +76,7 @@ const getAllActivities = asyncErrorHandler(
           ...activity.toJSON(),
           distance
         }
-      }).sort(
-        (a, b) => a.distance - b.distance
-      )
+      }).sort((a, b) => a.distance - b.distance)
     }
 
     else {
@@ -91,6 +89,7 @@ const getAllActivities = asyncErrorHandler(
       else if (sortBy === 'latest') {
         queryOptions.order = [['start_time', 'DESC']];
       }
+
       activities = await Activity.findAll(queryOptions);
     }
 

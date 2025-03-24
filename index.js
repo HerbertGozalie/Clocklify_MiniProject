@@ -4,7 +4,6 @@ dotenv.config()
 const app = require('./app.js')
 const { sequelize } = require('./models')
 const PORT = process.env.PORT
-
 app.listen(PORT, async() => {
   try {
     await sequelize.authenticate()
