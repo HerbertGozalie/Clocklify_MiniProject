@@ -195,10 +195,29 @@ const resetPassword = asyncErrorHandler(
   }
 )
 
-const deleteUser = asyncErrorHandler(
+const deleteUserById = asyncErrorHandler(
   async (req, res, next) => {
     const user = await User.findByPk(req.params.uuid)
 
+    await user.destroy()
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Activity Deleted',
+    })
+  }
+)
+
+const deleteUser = asyncErrorHandler(
+  async (req, res, next) => {
+     const email = req.body.email
+
+    const user = await User.findOne({
+      where: {
+        email 
+      } 
+    })
+    
     await user.destroy()
 
     res.status(200).json({
@@ -214,5 +233,6 @@ module.exports = {
   verifyEmail, 
   deleteUser,
   forgotPassword,
+  deleteUserById,
   resetPassword
 }
