@@ -195,6 +195,7 @@ const resetPassword = asyncErrorHandler(
   }
 )
 
+// for debugging purposes
 const deleteUserById = asyncErrorHandler(
   async (req, res, next) => {
     const user = await User.findByPk(req.params.uuid)
@@ -210,7 +211,7 @@ const deleteUserById = asyncErrorHandler(
 
 const deleteUser = asyncErrorHandler(
   async (req, res, next) => {
-     const email = req.body.email
+    const email = req.body.email
 
     const user = await User.findOne({
       where: {
