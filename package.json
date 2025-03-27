@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "dev": "NODE_ENV=development nodemon index.js",
     "migrate:prod": "sequelize-cli db:migrate --env production",
     "start": "npm run migrate:prod && node index.js"
   },
