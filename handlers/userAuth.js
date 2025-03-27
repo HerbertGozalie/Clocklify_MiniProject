@@ -228,5 +228,6 @@ module.exports = {
   verifyEmail, 
   deleteUser,
   forgotPassword,
+  deleteUserById,
   resetPassword
 }
