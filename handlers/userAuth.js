@@ -175,7 +175,7 @@ const resetPassword = asyncErrorHandler(
     }
 
     if(user.password === newPassword){
-      return next(new errorCustom(''))
+      return next(new errorCustom('New password cannot be the same as the old password', 400))
     }
 
     user.password = await hashPassword(newPassword)
