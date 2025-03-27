@@ -17,16 +17,16 @@ const validateRequest = (req, res, next) => {
 const validateUserRegister = [
   body('email')
     .notEmpty().withMessage("Email must be filled")
-    .isEmail().withMessage('Invalid email')
-    .custom(async value => {
-      const existingUser = await User.findOne({
-        where: { email: value }
-      });
+    .isEmail().withMessage('Invalid email'),
+    // .custom(async value => {
+    //   const existingUser = await User.findOne({
+    //     where: { email: value }
+    //   });
       
-      if(existingUser){
-        throw new errorCustom('Email already exists!', 409);
-      }
-    }),
+    //   if(existingUser){
+    //     throw new errorCustom('Email already exists!', 409);
+    //   }
+    // }),
   body("password")
     .notEmpty().withMessage("Password must be filled")
     .isStrongPassword().withMessage("Password has to be strong!"),

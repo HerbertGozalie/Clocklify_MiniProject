@@ -17,6 +17,14 @@ const registerUser = asyncErrorHandler(
     const { email, password } = req.body;
     const emailToken = crypto.randomBytes(64).toString('hex');
 
+    const existingUser = await User.findOne({
+      where: { email }
+    });
+      
+    if(existingUser){
+      return next(new errorCustom('Email already exists', 409))
+    }
+
     const user = await User.create({
       email,
       password: await hashPassword(password),
@@ -174,7 +182,7 @@ const resetPassword = asyncErrorHandler(
       return next(new errorCustom('Token is invalid or has expired!', 400))
     }
 
-    if(user.password === newPassword){
+    if (await comparePassword(newPassword, user.password)) {
       return next(new errorCustom('New password cannot be the same as the old password', 400))
     }
 
