@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon api/index.js",
     "migrate:prod": "sequelize-cli db:migrate --env production",
-    "start": "node index.js",
-    "build": "npm install"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
