@@ -13,6 +13,7 @@ const sendResetPassEmail = async (email, resetToken) => {
     }) 
 
   const resetUrl = `${process.env.REACT_FRONTEND_URL_DEPLOY}/reset-password?resetToken=${resetToken}`;
+  // const resetUrl = `${process.env.REACT_FRONTEND_URL}/reset-password?resetToken=${resetToken}`;
 
   const mailOptions = {
     from: {

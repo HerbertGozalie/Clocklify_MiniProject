@@ -13,6 +13,7 @@ const sendVerifEmail = async (email, emailToken) => {
   }) 
     
   const verificationUrl = `${process.env.REACT_FRONTEND_URL_DEPLOY}/verify-email?emailToken=${emailToken}`;
+  // const verificationUrl = `${process.env.REACT_FRONTEND_URL}/verify-email?emailToken=${emailToken}`;
 
   const mailOptions = {
     from: {
