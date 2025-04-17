@@ -31,7 +31,7 @@ const registerUser = asyncErrorHandler(
       emailToken
     })
 
-    sendVerifEmail(email, emailToken)
+    await sendVerifEmail(email, emailToken)
     const token = createJWT(user);
 
     res.status(201)
@@ -63,7 +63,7 @@ const loginUser = asyncErrorHandler(
     }
 
     if(!user.verified){
-      sendVerifEmail(user.email, user.emailToken)
+      await sendVerifEmail(user.email, user.emailToken)
       return next(new errorCustom('Account need to be verified!', 403))
     }
 
