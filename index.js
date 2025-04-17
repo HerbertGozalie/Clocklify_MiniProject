@@ -12,7 +12,7 @@ const errorCustom = require('./utils/errorCustom.js')
 const app = express()
 const PORT = process.env.PORT
 
-app.use(Express.static(Path.join(__dirname, 'assets')));
+app.use(express.static(Path.join(__dirname, 'assets')));
 //middlware
 app.use(cors())
 // app.use(cors({
