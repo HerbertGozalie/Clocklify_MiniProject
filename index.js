@@ -2,6 +2,7 @@ const express = require('express')
 const dotenv = require('dotenv')
 dotenv.config()
 const { sequelize } = require('./models/index.js')
+const path = require("path");
 const cors = require('cors')
 const morgan = require('morgan')
 const globalErrorHandler = require('./middlewares/globalErrorHandler.js')
@@ -12,7 +13,7 @@ const errorCustom = require('./utils/errorCustom.js')
 const app = express()
 const PORT = process.env.PORT
 
-app.use(express.static(Path.join(__dirname, 'assets')));
+app.use(express.static(path.join(__dirname, 'assets')));
 //middlware
 app.use(cors())
 // app.use(cors({
