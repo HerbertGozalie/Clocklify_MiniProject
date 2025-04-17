@@ -12,6 +12,21 @@ const errorCustom = require('./utils/errorCustom.js')
 const app = express()
 const PORT = process.env.PORT
 
+app.use(Express.static(Path.join(__dirname, 'assets')));
+//middlware
+app.use(cors())
+// app.use(cors({
+//   origin: '*',
+//   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   "preflightContinue": false,
+//   "optionsSuccessStatus": 204
+// }));
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(morgan('dev'))
+
 // Loggin middleware
 app.use(
   (req, res, next) => {
@@ -21,20 +36,6 @@ app.use(
     next();
   }
 )
-
-//middlware
-// app.use(cors())
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  "preflightContinue": false,
-  "optionsSuccessStatus": 204
-}));
-
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-app.use(morgan('dev'))
 
 //routes
 app.get("/", (req, res) => res.send("Express on Vercel"));
