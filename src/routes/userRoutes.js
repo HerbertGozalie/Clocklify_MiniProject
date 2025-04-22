@@ -7,13 +7,13 @@ const {
   forgotPassword,
   deleteUserById,
   resetPassword
-} = require('../handlers/userAuth.js')
+} = require('../controllers/userAuth.js')
 
 const {
   validateUserRegister, 
   validateUserLogin,
   validateUserResetPassword
-} = require('../middlewares/validator.js');
+} = require('../../middlewares/validator.js');
 
 route.post('/register', validateUserRegister, registerUser)
 route.patch('/verifyemail', verifyEmail)

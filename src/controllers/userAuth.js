@@ -1,4 +1,4 @@
-const { User } = require('../models');
+const { User } = require('../models/index.js');
 const crypto = require('crypto');
 const { Op } = require('sequelize')
 const asyncErrorHandler = require('../utils/asyncErrorHandler.js')

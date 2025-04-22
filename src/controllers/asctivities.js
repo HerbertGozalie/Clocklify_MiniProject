@@ -1,4 +1,4 @@
-const { Activity } = require('../models');
+const { Activity } = require('../models/index.js');
 const { Op } = require('sequelize')
 const asyncErrorHandler = require('../utils/asyncErrorHandler.js')
 const errorCustom = require('../utils/errorCustom.js')

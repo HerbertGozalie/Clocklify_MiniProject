@@ -14,6 +14,7 @@ const app = express()
 const PORT = process.env.PORT
 
 app.use(express.static(path.join(__dirname, 'assets')));
+
 //middlware
 app.use(cors())
 // app.use(cors({
@@ -62,8 +63,8 @@ app.use(globalErrorHandler)
 //     process.exit(1)
 //   }
 // })
+
 if (!process.env.VERCEL) {
-  const PORT = process.env.PORT || 3000;
   (async () => {
     try {
       await sequelize.authenticate();
