@@ -1,15 +1,15 @@
 const express = require('express')
 const dotenv = require('dotenv')
 dotenv.config()
-const { sequelize } = require('./models/index.js')
+const { sequelize } = require('./src/models/index.js')
 const path = require("path");
 const cors = require('cors')
 const morgan = require('morgan')
-const globalErrorHandler = require('./middlewares/globalErrorHandler.js')
-const { protect } = require('./middlewares/auth.js')
-const userRoutes = require('./routes/userRoutes.js')
-const activityRoutes = require('./routes/activityRoutes.js')
-const errorCustom = require('./utils/errorCustom.js')
+const globalErrorHandler = require('./src/middlewares/globalErrorHandler.js')
+const { protect } = require('./src/middlewares/auth.js')
+const userRoutes = require('./src/routes/userRoutes.js')
+const activityRoutes = require('./src/routes/activityRoutes.js')
+const errorCustom = require('./src/utils/errorCustom.js')
 const app = express()
 const PORT = process.env.PORT
 

@@ -13,7 +13,7 @@ const {
   validateUserRegister, 
   validateUserLogin,
   validateUserResetPassword
-} = require('../../middlewares/validator.js');
+} = require('../middlewares/validator.js');
 
 route.post('/register', validateUserRegister, registerUser)
 route.patch('/verifyemail', verifyEmail)

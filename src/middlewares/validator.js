@@ -1,8 +1,6 @@
 const { body, validationResult } = require('express-validator');
 const errorCustom = require('../utils/errorCustom.js');
 
-const { User } = require('../src/models/index.js');
-
 const validateRequest = (req, res, next) => {
     const errors = validationResult(req);
     const errorsMapped = errors.mapped();
@@ -18,15 +16,6 @@ const validateUserRegister = [
   body('email')
     .notEmpty().withMessage("Email must be filled")
     .isEmail().withMessage('Invalid email'),
-    // .custom(async value => {
-    //   const existingUser = await User.findOne({
-    //     where: { email: value }
-    //   });
-      
-    //   if(existingUser){
-    //     throw new errorCustom('Email already exists!', 409);
-    //   }
-    // }),
   body("password")
     .notEmpty().withMessage("Password must be filled")
     .isStrongPassword().withMessage("Password has to be strong!"),
