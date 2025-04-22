@@ -11,7 +11,7 @@ const {
   getSingleActivity,
   updateActivity,
   deleteActivity,
-} = require('../handlers/asctivities.js')
+} = require('../controllers/activities.js')
 
 route.post('/', validateActivity, createActivity)
 route.get('/', getAllActivities)
